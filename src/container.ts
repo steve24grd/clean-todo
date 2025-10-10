@@ -15,6 +15,12 @@ import type { CreateTodoPort } from "./ports/inbound/todo/CreateTodoPort";
 import type { ListTodosPort } from "./ports/inbound/todo/ListTodosPort";
 import type { CompleteTodoPort } from "./ports/inbound/todo/CompleteTodoPort";
 
+/*
+1. Creates repositories: Instantiates InMemoryUserRepository and InMemoryTodoRepository (outbound adapters for data persistence)
+2. Creates use cases: Instantiates all business logic use cases (CreateUser, GetUser, CreateTodo, ListTodos, CompleteTodo)
+3. Wires dependencies: Injects repositories and helper functions (like newId) into use cases
+4. Returns container: Provides structured access to inbound ports and outbound adapters
+*/
 export function buildContainer() {
   // Outbound adapters
   const userRepo = new InMemoryUserRepository();
