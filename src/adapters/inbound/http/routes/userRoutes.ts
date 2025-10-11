@@ -1,15 +1,29 @@
+// creates a modular, mountable route handler
 import { Router } from "express";
+
+// Import port interfaces to use as types
 import type { CreateUserPort } from "../../../../ports/inbound/user/CreateUserPort";
 import type { GetUserPort } from "../../../../ports/inbound/user/GetUserPort";
 
 /*
 Routes are decoupled from business logic; 
-they only handle HTTP concerns (parsing requests, formatting responses)
+- they only handle HTTP concerns (parsing requests, formatting responses)
+- Business logic lives in use cases (implementations of the ports)
+- This separation allows you to swap HTTP 
+for GraphQL, gRPC, CLI, etc., without changing business logic
 */
 
+/*
+Factory Function Pattern:
+- Dependency Injection - accepts port implementations as parameters
+- Returns a configured Express router
+- Enables testability - you can inject mock implementations in tests
+- Follows Hexagonal Architecture - the adapter (routes) depends on ports, 
+not concrete use cases
+*/
 export function buildUserRoutes(
-  createUser: CreateUserPort,
-  getUser: GetUserPort
+  createUser: CreateUserPort, // receiving interface type
+  getUser: GetUserPort // receiving interface type
 ) {
   const router = Router();
 
