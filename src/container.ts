@@ -1,6 +1,8 @@
+// import adapters
 import { InMemoryUserRepository } from "./adapters/outbound/persistence/InMemoryUserRepository";
 import { InMemoryTodoRepository } from "./adapters/outbound/persistence/InMemoryTodoRepository";
 
+// import use cases
 import { CreateUser } from "./use-cases/user/CreateUser";
 import { GetUser } from "./use-cases/user/GetUser";
 import { CreateTodo } from "./use-cases/todo/CreateTodo";
