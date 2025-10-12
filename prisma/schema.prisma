@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    String @id
+  name  String
+  email String @unique
+  todos Todo[]
+}
+
+model Todo {
+  id          String   @id
+  title       String
+  description String?
+  ownerId     String?
+  owner       User?    @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+}
