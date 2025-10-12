@@ -4,12 +4,14 @@ import { buildContainer } from "./container";
 import { buildUserRoutes } from "./adapters/inbound/http/routes/userRoutes";
 import { buildTodoRoutes } from "./adapters/inbound/http/routes/todoRoutes";
 import { errorHandler } from "./adapters/inbound/http/errorHandler";
+import { buildPrismaContainer } from "./container.prisma";
 
 // express init
 const app = express(); // instantiate core object
 app.use(express.json()); // register JSON parser middleware
 
 const container = buildContainer(); // dependency injection container
+const prismaContainer = buildPrismaContainer(); // dependency injection container (Prisma-backed)
 
 // register routes
 app.get("/health", (_req, res) => res.json({ ok: true }));
@@ -24,10 +26,28 @@ app.use(
 
 app.use(
   "/todos",
-  buildTodoRoutes( // Passes use-case (inbound + outbound ports implementation)
-    container.ports.inbound.createTodo, // Handles todo creation logic
-    container.ports.inbound.listTodos, // Handles listing todos
-    container.ports.inbound.completeTodo // Handles marking todos as complete
+  buildTodoRoutes(
+    container.ports.inbound.createTodo,
+    container.ports.inbound.listTodos,
+    container.ports.inbound.completeTodo
+  )
+);
+
+// Prisma-backed v2 routes (additional endpoints)
+app.use(
+  "/v2/users",
+  buildUserRoutes(
+    prismaContainer.ports.inbound.createUser,
+    prismaContainer.ports.inbound.getUser
+  )
+);
+
+app.use(
+  "/v2/todos",
+  buildTodoRoutes(
+    prismaContainer.ports.inbound.createTodo,
+    prismaContainer.ports.inbound.listTodos,
+    prismaContainer.ports.inbound.completeTodo
   )
 );
 
