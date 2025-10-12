@@ -13,9 +13,9 @@ export class CreateUser implements CreateUserPort {
     private idFactory: () => string // receiving interface type
   ) {}
 
-  // Use port types for input/output
-  // getting actual data from http request
-  async execute(input: CreateUserPort.Input): Promise<CreateUserPort.Output> {
+  // Use port DTO types for input/output
+  // getting actual data from http request (InputDTO crosses Presentation -> Application boundary)
+  async execute(input: CreateUserPort.InputDTO): Promise<CreateUserPort.OutputDTO> {
     const email = input.email.trim().toLowerCase();
     const existing = await this.userRepo.findByEmail(email);
     if (existing) {
@@ -31,6 +31,7 @@ export class CreateUser implements CreateUserPort {
 
     // utilize outbound ports
     await this.userRepo.save(user);
+    // Map Domain Entity -> OutputDTO (Application -> Presentation boundary)
     return { id: user.id, name: user.name, email: user.email };
   }
 }

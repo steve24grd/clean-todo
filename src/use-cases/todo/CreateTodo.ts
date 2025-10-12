@@ -12,7 +12,7 @@ export class CreateTodo implements CreateTodoPort {
     private userRepo: UserRepository
   ) {}
 
-  async execute(input: CreateTodoPort.Input): Promise<CreateTodoPort.Output> {
+  async execute(input: CreateTodoPort.InputDTO): Promise<CreateTodoPort.OutputDTO> {
     const ownerId = input.ownerId ?? null;
 
     if (ownerId) {
@@ -35,6 +35,7 @@ export class CreateTodo implements CreateTodoPort {
     }
 
     await this.todoRepo.save(todo);
+    // Map Domain Entity -> OutputDTO (Application -> Presentation boundary)
     return {
       id: todo.id,
       title: todo.title,

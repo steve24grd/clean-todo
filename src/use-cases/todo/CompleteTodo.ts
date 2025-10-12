@@ -6,7 +6,7 @@ import { ValidationError } from "../errors/ValidationError";
 export class CompleteTodo implements CompleteTodoPort {
   constructor(private todoRepo: TodoRepository) {}
 
-  async execute(id: string): Promise<CompleteTodoPort.Output> {
+  async execute(id: string): Promise<CompleteTodoPort.OutputDTO> {
     const todo = await this.todoRepo.findById(id);
     if (!todo) throw new NotFoundError("Todo not found");
 
@@ -18,6 +18,7 @@ export class CompleteTodo implements CompleteTodoPort {
 
     await this.todoRepo.save(todo);
 
+    // Map Domain Entity -> OutputDTO (Application -> Presentation boundary)
     return {
       id: todo.id,
       title: todo.title,
