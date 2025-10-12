@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run src/main.ts"
+    "dev": "bun run src/main.ts",
+    "test": "bun test",
+    "prisma:generate": "bunx prisma generate",
+    "prisma:migrate": "bunx prisma migrate dev",
+    "prisma:studio": "bunx prisma studio"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +16,12 @@
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^24.7.0",
+    "prisma": "^6.17.1",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "@prisma/client": "^6.17.1",
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
   }
 }
