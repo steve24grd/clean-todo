@@ -1,5 +1,10 @@
 export namespace ListTodosPort {
-  export type OutputItem = {
+  /**
+   * DTO: Data Transfer Object for a single todo item in the ListTodos result set.
+   * Role: Carries todo data from Application (use case) back to the HTTP adapter.
+   * Boundary: Crosses from Application (use case) to Presentation (adapter) layer.
+   */
+  export type OutputItemDTO = {
     id: string;
     title: string;
     description: string | null;
@@ -11,5 +16,5 @@ export namespace ListTodosPort {
 }
 
 export interface ListTodosPort {
-  execute(ownerId?: string): Promise<ListTodosPort.OutputItem[]>;
+  execute(ownerId?: string): Promise<ListTodosPort.OutputItemDTO[]>;
 }

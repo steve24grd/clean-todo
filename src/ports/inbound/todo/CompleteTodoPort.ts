@@ -1,5 +1,10 @@
 export namespace CompleteTodoPort {
-  export type Output = {
+  /**
+   * DTO: Data Transfer Object returned by the CompleteTodo use case.
+   * Role: Carries updated todo data from Application (use case) back to the HTTP adapter.
+   * Boundary: Crosses from Application (use case) to Presentation (adapter) layer.
+   */
+  export type OutputDTO = {
     id: string;
     title: string;
     description: string | null;
@@ -10,5 +15,5 @@ export namespace CompleteTodoPort {
 }
 
 export interface CompleteTodoPort {
-  execute(id: string): Promise<CompleteTodoPort.Output>;
+  execute(id: string): Promise<CompleteTodoPort.OutputDTO>;
 }

@@ -64,10 +64,21 @@ This is a common TypeScript pattern for **port interfaces** in Clean Architectur
 
 */
 export namespace CreateUserPort {
-  export type Input = { name: string; email: string };
-  export type Output = { id: string; name: string; email: string };
+  /**
+   * DTO: Data Transfer Object for creating a new user.
+   * Role: Carries data from HTTP inbound adapter to the CreateUser use case.
+   * Boundary: Crosses from Presentation (adapter) to Application (use case) layer.
+   */
+  export type InputDTO = { name: string; email: string };
+
+  /**
+   * DTO: Data Transfer Object returned by the CreateUser use case.
+   * Role: Carries data from Application (use case) back to the HTTP adapter for response.
+   * Boundary: Crosses from Application (use case) to Presentation (adapter) layer.
+   */
+  export type OutputDTO = { id: string; name: string; email: string };
 }
 
 export interface CreateUserPort {
-  execute(input: CreateUserPort.Input): Promise<CreateUserPort.Output>;
+  execute(input: CreateUserPort.InputDTO): Promise<CreateUserPort.OutputDTO>;
 }
