@@ -29,6 +29,7 @@ export class CreateUser implements CreateUserPort {
       throw new ValidationError(e.message);
     }
 
+    // utilize outbound ports
     await this.userRepo.save(user);
     return { id: user.id, name: user.name, email: user.email };
   }

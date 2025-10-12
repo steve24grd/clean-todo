@@ -16,7 +16,7 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 
 app.use(
   "/users",
-  buildUserRoutes( // Passes inbound ports (use cases) to the route builder
+  buildUserRoutes( // Passes use-case (inbound + outbound ports implementation)
     container.ports.inbound.createUser, // Handles user creation logic
     container.ports.inbound.getUser // Handles user retrieval logic
   )
@@ -24,7 +24,7 @@ app.use(
 
 app.use(
   "/todos",
-  buildTodoRoutes( // Passes three inbound ports to the route builder
+  buildTodoRoutes( // Passes use-case (inbound + outbound ports implementation)
     container.ports.inbound.createTodo, // Handles todo creation logic
     container.ports.inbound.listTodos, // Handles listing todos
     container.ports.inbound.completeTodo // Handles marking todos as complete

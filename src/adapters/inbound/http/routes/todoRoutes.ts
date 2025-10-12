@@ -3,6 +3,10 @@ import type { CreateTodoPort } from "../../../../ports/inbound/todo/CreateTodoPo
 import type { ListTodosPort } from "../../../../ports/inbound/todo/ListTodosPort";
 import type { CompleteTodoPort } from "../../../../ports/inbound/todo/CompleteTodoPort";
 
+/*
+does not implement the ports, 
+instead composes them to provide HTTP endpoints
+*/
 export function buildTodoRoutes(
   createTodo: CreateTodoPort,
   listTodos: ListTodosPort,
