@@ -1,8 +1,3 @@
-
-I'll scan the repository structure and a few key files (like package.json, README, and common folders such as app/, src/, prisma/, and API directories) to accurately describe the current architecture and conventions. Running these read-only inspections in parallel to keep this to a single discovery round.
-
-
-
 ## Clean Todo Architecture Guide
 
 This document prescribes how this codebase is organized and how to extend it while preserving Clean Architecture (Hexagonal / Ports & Adapters) principles.
@@ -50,12 +45,12 @@ This document prescribes how this codebase is organized and how to extend it whi
   - Owns core entities and invariants (e.g., Todo, User)
   - No dependencies on other layers or libraries
 - Ports (src/ports)
-  - Inbound ports: define use case contracts (Inputs/Outputs/execute)
+  - Inbound ports: define use case contracts (InputDTO/OutputDTO/execute)
   - Outbound ports: define repository contracts (e.g., UserRepository)
 - Use Cases (src/use-cases)
   - Implement inbound ports
   - Orchestrate domain logic and call outbound ports
-  - Map domain objects to DTOs (Input/Output types from ports)
+  - Map domain objects to DTOs (InputDTO/OutputDTO types from ports)
 - Adapters (src/adapters)
   - Inbound adapters: HTTP route factories that parse/validate requests and call use cases
   - Outbound adapters: Repository implementations (in-memory or Prisma)
@@ -105,14 +100,14 @@ Prohibited:
 
 ## 6) Naming Conventions
 
-- Inbound ports: VerbNounPort.ts with namespaced Input/Output types
+- Inbound ports: VerbNounPort.ts with namespaced InputDTO/OutputDTO types
 ````ts path=src/ports/inbound/user/CreateUserPort.ts mode=EXCERPT
 export namespace CreateUserPort {
-  export type Input = { name: string; email: string };
-  export type Output = { id: string; name: string; email: string };
+  export type InputDTO = { name: string; email: string };
+  export type OutputDTO = { id: string; name: string; email: string };
 }
 export interface CreateUserPort {
-  execute(input: CreateUserPort.Input): Promise<CreateUserPort.Output>;
+  execute(input: CreateUserPort.InputDTO): Promise<CreateUserPort.OutputDTO>;
 }
 ````
 - Use cases: class VerbNoun implements VerbNounPort (e.g., CreateUser, ListTodos)
@@ -236,7 +231,7 @@ expect(await getUser.execute(created.id)).toEqual(created);
 - Conventions
   - Prefer smallest scope that gives confidence (unit → integration → e2e)
   - Clear DB state before/after integration tests (see beforeAll in test)
-  - Assert on DTOs (port outputs), not internal entity shapes
+  - Assert on DTOs (port OutputDTOs), not internal entity shapes
 
 ---
 
@@ -246,7 +241,7 @@ Follow this checklist to add features while preserving architecture:
 
 A. New Use Case (e.g., DeleteTodo)
 1) Define inbound port
-   - Create src/ports/inbound/todo/DeleteTodoPort.ts with namespaced Input/Output
+   - Create src/ports/inbound/todo/DeleteTodoPort.ts with namespaced InputDTO/OutputDTO
 2) Implement use case
    - Add src/use-cases/todo/DeleteTodo.ts implementing DeleteTodoPort
    - Use outbound ports only; map to Output DTOs
@@ -290,7 +285,7 @@ D. Dependency Discipline (Do/Don’t)
 - Do: have adapters depend on ports and frameworks
 - Do: keep use-cases free of Express/Prisma imports
 - Don’t: import adapters from use-cases or domain
-- Don’t: return domain entities directly to HTTP; use port Output DTOs
+- Don’t: return domain entities directly to HTTP; use port OutputDTOs
 
 E. Naming/Placement Checklist
 - Ports: src/ports/inbound|outbound with VerbNounPort / NounRepository
