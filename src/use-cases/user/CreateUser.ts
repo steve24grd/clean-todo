@@ -16,7 +16,10 @@ export class CreateUser implements CreateUserPort {
   // Use port DTO types for input/output
   // getting actual data from http request (InputDTO crosses Presentation -> Application boundary)
   async execute(input: CreateUserPort.InputDTO): Promise<CreateUserPort.OutputDTO> {
+    // inbound port manipulation
     const email = input.email.trim().toLowerCase();
+
+    // utilize outbound ports
     const existing = await this.userRepo.findByEmail(email);
     if (existing) {
       throw new ValidationError("Email already in use");
